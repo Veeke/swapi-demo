@@ -17,16 +17,33 @@ export class DataService {
   characterDataLoaded = new Subject<Character[]>();
   planetDataLoaded = new Subject<string[]>();
 
+  private rootURL: string = "https://swapi.dev/api/";
+
   constructor(private http: HttpClient) {}
 
+  // Biggest bottleneck currently (can take 30-40s to fetch all characters).
+  // I don't know how much of the delay is due to the API and how much is my code being inefficient.
+  // Currently I'm making recursive calls using the data's "next" property to fetch everything at once.
+  // You could probably optimize it by only loading pages as needed or making multiple requests at the same time, 
+  // but I wasn't sure how to do that without hard coding page/element counts.
+
+  // The steps are as follows:
+  // - If the data already exists in local storage, fetch that data. Else, get the data from the API.
+  // - Fetch films first, as they are used in formatting the character data.
+  // - Character observable keeps making HTTP requests recursively to the next page while there is one, and brings them all together.
+  // - Subscribe to the films$ to make sure the data is present, then subscribe to characters$ to format the incoming data according to the Character interface.
+  // - Once everything's done, save the data to local storage and signal that the data has been loaded.
+
   fetchCharacters(): Observable<Character[]>{
+
     if (localStorage.getItem(this.characterKey) !== null){
       this.characters = this.loadData(this.characterKey);
       return of(this.characters);
     }
-
+   
+    const path = "people/"
+    var nextPage = this.rootURL + path;
     const films$ = this.fetchFilms();
-    var nextPage = "https://swapi.dev/api/people/"; 
 
     const characters$ = this.getResponse(nextPage).pipe(
       expand(response => {
@@ -40,7 +57,6 @@ export class DataService {
       })
     );
 
-    //Make sure films are loaded first, as I need the data for the characters
     films$.subscribe(films => {
       this.films = films;
       characters$.subscribe(data => {
@@ -59,7 +75,10 @@ export class DataService {
   }
 
   fetchFilms(): Observable<Film[]>{
-    return this.http.get("https://swapi.dev/api/films/").pipe(map(data => {
+    const path = "films/"
+    const url = this.rootURL + path;
+
+    return this.http.get(url).pipe(map(data => {
       return data['results'].map((film: Film) => {
         return {
           title: film['title'], 
@@ -75,7 +94,8 @@ export class DataService {
       return of(this.planets);
     }
 
-    var nextPage = "https://swapi.dev/api/planets/"
+    const path = "planets/"
+    var nextPage = this.rootURL + path;
 
     const planets$ = this.getResponse(nextPage).pipe(
       expand(response => {
@@ -140,11 +160,12 @@ export class DataService {
     this.planetDataLoaded.next(this.planets.slice());
   }
 
+  //Use a regex to find the first number in the given urls, then return the corresponding films
   getFilmDetails(filmUrls: string[]): Film[] {
     const films = [];
+    const r = /\d+/; 
     for (let i = 0; i < filmUrls.length; i++){
-      const r = /\d+/;
-      const index = +(filmUrls[i].match(r));
+      const index = +(filmUrls[i].match(r)); 
       films.push(this.films[index - 1]);
     }
     return films;

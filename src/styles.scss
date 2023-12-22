@@ -1,23 +1,21 @@
+:root{
+  --background-color: #2c2b2e;
+  --darker-color: #19181b;
+  --lighter-color: #4b4a4d;
+  --accent-color: #358ec9;
+}
+
 html {
-  font-family: system-ui, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family: ui-rounded, 'Hiragino Maru Gothic ProN', Quicksand, Comfortaa, Manjari, 'Arial Rounded MT', 'Arial Rounded MT Bold', Calibri, source-sans-pro, sans-serif;
 }
 
 body {
-  margin: 0;
-  background-color: #2c2b2e;
-  color: #f0eef5;
+  background-color: var(--background-color);
+  color: white;
 }
 
 li:not(.active) a:hover{
-  background-color: #000000;
-}
-
-.loading-spinner{
-  position: fixed;
-  top:  50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
+  background-color: black;
 }
 
 a {
@@ -26,10 +24,6 @@ a {
   color: white;
   text-align: center;
   padding: 12px 24px;
-}
-
-.active {
-  background-color: #2c2b2e;
 }
 
 .overlay{

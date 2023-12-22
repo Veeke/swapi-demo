@@ -1,6 +1,5 @@
 .list-container{
   width: 100%;
-  background-color: #4b4a4d;
 }
 
 .btn-left{
@@ -13,13 +12,14 @@
 }
 
 button{
-  background-color: #4b4a4d;
+  background-color: var(--lighter-color);
   color: white;
   height: 36px;
   width: 36px;
   border: none;
   position: absolute;
   bottom: 2vh;
+  border-radius: 5px;
 }
 
 button:disabled{
@@ -27,7 +27,7 @@ button:disabled{
 }
 
 button:hover{
-  background-color: #19181b;
+  background-color: var(--darker-color);
 }
 
 

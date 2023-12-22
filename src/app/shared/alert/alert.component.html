@@ -1,7 +1,10 @@
-<div class="overlay"></div>
-<div class="alert-box">
-  <p>{{ message }}</p>
-  <div class="alert-box-actions">
-    <button (click)="onClose()">Close</button>
+
+<div *ngIf="alertService.message">
+  <div class="overlay"></div>
+    <div class="alert-box">
+      <p>{{ alertService.message }}</p>
+    <div class="alert-box-actions">
+      <button (click)="onClose()">Close</button>
+    </div>
   </div>
 </div>

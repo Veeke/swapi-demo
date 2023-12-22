@@ -1,13 +1,5 @@
-<app-alert 
-  [message]="error" 
-  *ngIf="error"
-  (close)="onHandleError()">
-</app-alert>
-<div class="overlay" *ngIf="isLoading">
-  <div class="loading-spinner">
-    <app-loading-spinner></app-loading-spinner>
-  </div>
-</div>
+<app-alert></app-alert>
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
 <div class="search-bar">
   <input 
     type="text" 
@@ -17,7 +9,7 @@
 <hr>
 <div class="container">
   <div class="row">
-    <ul>
+    <ul class="planet-list">
       <li *ngFor="let planet of planets | filter:searchInput">
         <h6> {{ planet | capitalize }} </h6>
       </li>

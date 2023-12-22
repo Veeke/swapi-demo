@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../shared/data.service';
+import { AlertService } from '../shared/alert/alert.service';
 
 @Component({
   selector: 'app-header',
@@ -9,7 +10,8 @@ import { DataService } from '../shared/data.service';
 export class HeaderComponent implements OnInit{
   isLoading: boolean = false;
   
-  constructor(private dataService: DataService) {}
+  constructor(
+    private dataService: DataService, private alertService: AlertService) {}
 
   ngOnInit(){
     //Disable buttons while page is loading
@@ -27,5 +29,6 @@ export class HeaderComponent implements OnInit{
   
   onClearData(){
     this.dataService.clearData();
+    this.alertService.add("Local storage has been cleared.")
   }
 }

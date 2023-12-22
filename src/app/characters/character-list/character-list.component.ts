@@ -3,6 +3,7 @@ import { Character } from '../character.model';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { DataService } from 'src/app/shared/data.service';
+import { AlertService } from 'src/app/shared/alert/alert.service';
 
 @Component({
   selector: 'app-character-list',
@@ -15,7 +16,6 @@ export class CharacterListComponent implements OnInit, OnDestroy{
 
   subscription: Subscription;
   isLoading = false;
-  error: string = null;
   
   itemCount: number;
   itemsPerPage: number = 10;
@@ -27,6 +27,7 @@ export class CharacterListComponent implements OnInit, OnDestroy{
 
   constructor(
     private dataService: DataService, 
+    private alertService: AlertService,
     private route: ActivatedRoute,
     private router: Router
   ){}
@@ -44,21 +45,13 @@ export class CharacterListComponent implements OnInit, OnDestroy{
         this.initializeData(characters);
       },
       error => {
-        this.error = 'An error has occured. Error message: ' + error.message;
+        this.alertService.add('An error has occured. Error message: ' + error.message);
       });
     }
 
     this.route.queryParams.subscribe((params: Params) => {
-      this.currentPage = +params['page'] ? +params['page'] : 1;
-      this.startIndex = (this.currentPage - 1) * this.itemsPerPage;
-
-      // To prevent errors:
-      if (!this.canChangePage(this.currentPage)){
-        this.currentPage = 1;
-        this.onChangePage(1);
-      }
-      if (this.itemCount){ 
-        this.endIndex = Math.min(this.currentPage * this.itemsPerPage, this.itemCount);
+      if (params['page']){
+        this.validatePage(params['page']);
       }
     });
   }
@@ -70,21 +63,35 @@ export class CharacterListComponent implements OnInit, OnDestroy{
     this.isLoading = false;
   }
 
+  validatePage(pageParam : string){
+    const r = /\d+/;
+    const pageNumber = +(pageParam.match(r));
+
+    if (pageNumber && this.canChangePage(pageNumber)){
+      this.currentPage = pageNumber;
+    } else {
+      this.currentPage = 1;
+      this.onChangePage(1);
+      this.alertService.add('The page is invalid.');
+    }
+
+    this.startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    if (this.itemCount){ 
+      this.endIndex = Math.min(this.currentPage * this.itemsPerPage, this.itemCount);
+    }
+  }
+
   onChangePage(page: number){
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
-        page: (page === 1) ? null : page,
+        page: page,
       },
     });
   }
 
   canChangePage(page: number): boolean{
     return (page > 0 && page <= this.pageCount);
-  }
-
-  onHandleError(){
-    this.error = null;
   }
 
   ngOnDestroy(): void {

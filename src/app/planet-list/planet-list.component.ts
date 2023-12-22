@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { DataService } from '../shared/data.service';
 import { Subscription } from 'rxjs';
+import { AlertService } from '../shared/alert/alert.service';
 
 @Component({
   selector: 'app-planet-list',
@@ -13,33 +14,32 @@ export class PlanetListComponent implements OnInit, OnDestroy{
   searchInput: string = '';
 
   isLoading = false;
-  error: string = null;
 
   subscription: Subscription;
 
-  constructor(private dataService: DataService){}
+  constructor(private dataService: DataService, private alertService: AlertService){}
 
   ngOnInit(){
     this.isLoading = true;
     const newPlanets = this.dataService.getPlanets();
 
     if (newPlanets.length !== 0){
-      this.planets = newPlanets; 
-      this.isLoading = false;
+      this.initializeData(newPlanets);
     }
     else{
       this.subscription = this.dataService.planetDataLoaded.subscribe((planets: string[]) => {
-        this.planets = planets;
-        this.isLoading = false;
+        this.initializeData(planets);
       },
       error => {
-        this.error = 'An error has occured. Error message: ' + error.message;
+        this.alertService.add('An error has occured. Error message: ' + error.message);
       });
     }
   }
 
-  onHandleError(){
-    this.error = null;
+  initializeData(planets: string[]){
+    const sortedPlanets = planets.sort();
+    this.planets = sortedPlanets;
+    this.isLoading = false;
   }
 
   ngOnDestroy(){
