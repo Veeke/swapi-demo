@@ -16,6 +16,6 @@
     
 - Run `npm install` to install the necessary dependencies.
   
-- Run `ng serve` to run the application on a dev server. Navigate to `http://localhost:4200`
+- Run `ng serve` to run the application on a dev server. Navigate to http://localhost:4200
   
   - Alternatively, use `ng serve --open`  to automatically open the application in your browser.
