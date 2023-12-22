@@ -1,6 +1,6 @@
 # Star Wars Assessment
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.9.
+[GitHub Page](https://veeke.github.io/swapi-demo/)
 
 ## How to run the application locally
 
