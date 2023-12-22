@@ -1,0 +1,15 @@
+ul{
+  list-style: none;
+  column-count: 4;
+  flex-direction: row;
+}
+
+h6{
+  padding-top: 12px;
+}
+
+.search-bar{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

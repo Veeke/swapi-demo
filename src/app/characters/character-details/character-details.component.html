@@ -1,0 +1,26 @@
+<div class="details-container"*ngIf="character">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1><b>{{character.name}}</b></h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <b>Gender:</b> {{character.gender | capitalize}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <b>Birth Year:</b> {{character.birthYear | capitalize}}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12">
+      <b>Appears In:</b>
+      <li
+        *ngFor="let film of character.filmArray">
+        {{ film.title }} ({{ film.releaseDate }})
+      </li>
+    </div>
+  </div>
+</div>

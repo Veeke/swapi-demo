@@ -1,0 +1,27 @@
+<app-alert 
+  [message]="error" 
+  *ngIf="error"
+  (close)="onHandleError()">
+</app-alert>
+<div class="overlay" *ngIf="isLoading">
+  <div class="loading-spinner">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+</div>
+<div class="search-bar">
+  <input 
+    type="text" 
+    [(ngModel)]="searchInput"
+    placeholder="Search for a planet">
+</div>
+<hr>
+<div class="container">
+  <div class="row">
+    <ul>
+      <li *ngFor="let planet of planets | filter:searchInput">
+        <h6> {{ planet | capitalize }} </h6>
+      </li>
+    </ul>
+  </div>
+</div>
+

@@ -1,0 +1,13 @@
+a {
+  text-align: left;
+  padding: 4%;
+  border-bottom: 2px solid #2c2b2e;
+}
+
+a:not(.active):hover{
+  background-color: #19181b;
+}
+
+.active {
+  background-color: #358ec9;
+}

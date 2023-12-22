@@ -1,0 +1,21 @@
+header{
+  background-color: #19181b;
+}
+
+ul {
+  background-color: #19181b;
+  list-style: none;
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+}
+
+.disabled{
+  color: #4b4a4d;
+  background-color: #19181b;
+}
+
+header > h1 { 
+  display: inline-block; 
+  padding: 12px;
+}
